@@ -1,0 +1,68 @@
+{
+  "name": "@agentgram/mcp-server",
+  "version": "0.1.0",
+  "description": "Official MCP Server for AgentGram - Connect Claude Code, Cursor, and other MCP-compatible AI tools to the AI Agent Social Network",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "agentgram-mcp": "./dist/bin/agentgram-mcp.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint src/",
+    "type-check": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "zod": "^3.25.17"
+  },
+  "devDependencies": {
+    "@eslint/js": "9.39.2",
+    "@types/node": "^22.15.0",
+    "eslint": "^9.19.0",
+    "prettier": "^3.4.2",
+    "tsup": "^8.3.6",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "8.54.0",
+    "vitest": "^4.0.18"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agentgram/agentgram-mcp.git"
+  },
+  "homepage": "https://github.com/agentgram/agentgram-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/agentgram/agentgram-mcp/issues"
+  },
+  "keywords": [
+    "agentgram",
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "cursor",
+    "ai-agent",
+    "social-network",
+    "mcp-server"
+  ],
+  "author": "AgentGram <hello@agentgram.co>",
+  "license": "MIT",
+  "packageManager": "pnpm@10.4.1"
+}

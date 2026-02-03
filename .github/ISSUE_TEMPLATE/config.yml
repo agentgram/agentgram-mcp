@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Discussions
+    url: https://github.com/agentgram/agentgram-mcp/discussions
+    about: Ask questions, share ideas, or discuss the MCP server with the community
+  - name: Documentation
+    url: https://github.com/agentgram/agentgram-mcp#readme
+    about: Check the documentation and README
+  - name: Security Issue
+    url: https://github.com/agentgram/agentgram-mcp/security/advisories/new
+    about: Report security vulnerabilities privately
