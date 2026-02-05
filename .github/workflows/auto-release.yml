@@ -61,7 +61,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          CHANGELOG=$(git log "${LAST_TAG}..HEAD" --pretty=format:"- %s (%h)" --no-merges)
+          # Check if LAST_TAG is a real tag or just the default v0.0.0
+          if git rev-parse "${LAST_TAG}" >/dev/null 2>&1; then
+            CHANGELOG=$(git log "${LAST_TAG}..HEAD" --pretty=format:"- %s (%h)" --no-merges)
+          else
+            CHANGELOG=$(git log HEAD --pretty=format:"- %s (%h)" --no-merges)
+          fi
 
           git tag -a "$VERSION" -m "Release ${VERSION}
 
@@ -78,34 +83,41 @@ jobs:
           VERSION: ${{ steps.version.outputs.version }}
           LAST_TAG: ${{ steps.version.outputs.last_tag }}
         run: |
+          # Check if LAST_TAG is a real tag
+          if git rev-parse "${LAST_TAG}" >/dev/null 2>&1; then
+            RANGE="${LAST_TAG}..HEAD"
+          else
+            RANGE="HEAD"
+          fi
+
           {
             echo "# Release ${VERSION}"
             echo ""
             echo "## Changes since ${LAST_TAG}"
             echo ""
 
-            FEATS=$(git log "${LAST_TAG}..HEAD" --pretty=format:"- %s (%h)" --no-merges --grep="^feat")
+            FEATS=$(git log "${RANGE}" --pretty=format:"- %s (%h)" --no-merges --grep="^feat")
             if [ -n "$FEATS" ]; then
               echo "### Features"
               echo "$FEATS"
               echo ""
             fi
 
-            FIXES=$(git log "${LAST_TAG}..HEAD" --pretty=format:"- %s (%h)" --no-merges --grep="^fix")
+            FIXES=$(git log "${RANGE}" --pretty=format:"- %s (%h)" --no-merges --grep="^fix")
             if [ -n "$FIXES" ]; then
               echo "### Bug Fixes"
               echo "$FIXES"
               echo ""
             fi
 
-            DOCS=$(git log "${LAST_TAG}..HEAD" --pretty=format:"- %s (%h)" --no-merges --grep="^docs")
+            DOCS=$(git log "${RANGE}" --pretty=format:"- %s (%h)" --no-merges --grep="^docs")
             if [ -n "$DOCS" ]; then
               echo "### Documentation"
               echo "$DOCS"
               echo ""
             fi
 
-            REFACTORS=$(git log "${LAST_TAG}..HEAD" --pretty=format:"- %s (%h)" --no-merges --grep="^refactor")
+            REFACTORS=$(git log "${RANGE}" --pretty=format:"- %s (%h)" --no-merges --grep="^refactor")
             if [ -n "$REFACTORS" ]; then
               echo "### Refactoring"
               echo "$REFACTORS"
@@ -115,7 +127,7 @@ jobs:
             echo "---"
             echo ""
             echo "### All Commits"
-            git log "${LAST_TAG}..HEAD" --pretty=format:"- %s (%h)" --no-merges
+            git log "${RANGE}" --pretty=format:"- %s (%h)" --no-merges
           } > RELEASE_NOTES.md
 
           cat RELEASE_NOTES.md
