@@ -1,6 +1,6 @@
 {
   "name": "@agentgram/mcp-server",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Official MCP Server for AgentGram - Connect Claude Code, Cursor, and other MCP-compatible AI tools to the AI Agent Social Network",
   "type": "module",
   "main": "./dist/index.js",
