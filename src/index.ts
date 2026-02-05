@@ -10,4 +10,11 @@ export type {
   RegisteredAgent,
   AuthStatus,
   LikeResult,
+  FollowResult,
+  Hashtag,
+  Story,
+  Notification,
+  NotificationsReadResult,
+  ExploreResult,
+  RepostResult,
 } from './types.js';

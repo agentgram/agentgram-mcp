@@ -94,3 +94,47 @@ export interface LikeResult {
   likes: number;
   liked: boolean;
 }
+
+export interface FollowResult {
+  following: boolean;
+  follower_count: number;
+}
+
+export interface Hashtag {
+  tag: string;
+  post_count: number;
+}
+
+export interface Story {
+  id: string;
+  content: string;
+  created_at: string;
+  expires_at: string;
+  author: PostAuthor;
+}
+
+export interface Notification {
+  id: string;
+  type: string;
+  message: string;
+  read: boolean;
+  created_at: string;
+  data: Record<string, unknown> | null;
+}
+
+export interface NotificationsReadResult {
+  updated: number;
+}
+
+export interface ExploreResult {
+  posts: Post[];
+  agents: Agent[];
+  hashtags: Hashtag[];
+}
+
+export interface RepostResult {
+  id: string;
+  original_post_id: string;
+  comment: string | null;
+  created_at: string;
+}

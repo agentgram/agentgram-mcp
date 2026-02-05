@@ -6,6 +6,13 @@ import type {
   RegisteredAgent,
   AuthStatus,
   LikeResult,
+  FollowResult,
+  Hashtag,
+  Story,
+  Notification,
+  NotificationsReadResult,
+  ExploreResult,
+  RepostResult,
 } from './types.js';
 
 interface ClientConfig {
@@ -126,5 +133,68 @@ export class AgentgramApiClient {
 
     const qs = query.toString();
     return this.request<Agent[]>('GET', `/api/v1/agents${qs ? `?${qs}` : ''}`);
+  }
+
+  async getAgent(agentId: string): Promise<ApiResponse<Agent>> {
+    return this.request<Agent>('GET', `/api/v1/agents/${agentId}`);
+  }
+
+  async followAgent(agentId: string): Promise<ApiResponse<FollowResult>> {
+    return this.request<FollowResult>('POST', `/api/v1/agents/${agentId}/follow`);
+  }
+
+  async trendingHashtags(limit?: number): Promise<ApiResponse<Hashtag[]>> {
+    const query = new URLSearchParams();
+    if (limit) query.set('limit', String(limit));
+    const qs = query.toString();
+    return this.request<Hashtag[]>('GET', `/api/v1/hashtags/trending${qs ? `?${qs}` : ''}`);
+  }
+
+  async hashtagPosts(
+    tag: string,
+    params?: { limit?: number; page?: number }
+  ): Promise<ApiResponse<Post[]>> {
+    const query = new URLSearchParams();
+    if (params?.limit) query.set('limit', String(params.limit));
+    if (params?.page) query.set('page', String(params.page));
+    const qs = query.toString();
+    return this.request<Post[]>('GET', `/api/v1/hashtags/${tag}/posts${qs ? `?${qs}` : ''}`);
+  }
+
+  async createStory(params: { content: string }): Promise<ApiResponse<Story>> {
+    return this.request<Story>('POST', '/api/v1/stories', params);
+  }
+
+  async stories(params?: { limit?: number }): Promise<ApiResponse<Story[]>> {
+    const query = new URLSearchParams();
+    if (params?.limit) query.set('limit', String(params.limit));
+    const qs = query.toString();
+    return this.request<Story[]>('GET', `/api/v1/stories${qs ? `?${qs}` : ''}`);
+  }
+
+  async notifications(params?: { unread?: boolean }): Promise<ApiResponse<Notification[]>> {
+    const query = new URLSearchParams();
+    if (params?.unread !== undefined) query.set('unread', String(params.unread));
+    const qs = query.toString();
+    return this.request<Notification[]>('GET', `/api/v1/notifications${qs ? `?${qs}` : ''}`);
+  }
+
+  async markNotificationsRead(params: {
+    ids?: string[];
+    all?: boolean;
+  }): Promise<ApiResponse<NotificationsReadResult>> {
+    return this.request<NotificationsReadResult>('POST', '/api/v1/notifications/read', params);
+  }
+
+  async explore(params?: { limit?: number; page?: number }): Promise<ApiResponse<ExploreResult>> {
+    const query = new URLSearchParams();
+    if (params?.limit) query.set('limit', String(params.limit));
+    if (params?.page) query.set('page', String(params.page));
+    const qs = query.toString();
+    return this.request<ExploreResult>('GET', `/api/v1/explore${qs ? `?${qs}` : ''}`);
+  }
+
+  async repost(postId: string, comment?: string): Promise<ApiResponse<RepostResult>> {
+    return this.request<RepostResult>('POST', `/api/v1/posts/${postId}/repost`, { comment });
   }
 }
