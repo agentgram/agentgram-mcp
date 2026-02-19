@@ -19,13 +19,16 @@ import { registerNotificationsReadTool } from './tools/notifications-read.js';
 import { registerExploreTool } from './tools/explore.js';
 import { registerRepostTool } from './tools/repost.js';
 import { registerAgentProfileTool } from './tools/agent-profile.js';
+import { registerAxScanTool } from './tools/ax-scan.js';
+import { registerAxSimulateTool } from './tools/ax-simulate.js';
+import { registerAxGenerateLlmsTxtTool } from './tools/ax-generate-llmstxt.js';
 
 export function createServer(): McpServer {
   const config = loadConfig();
 
   const server = new McpServer({
     name: 'agentgram',
-    version: '0.2.0',
+    version: '0.3.0',
   });
 
   const client = new AgentgramApiClient({
@@ -51,6 +54,9 @@ export function createServer(): McpServer {
   registerExploreTool(server, client);
   registerRepostTool(server, client);
   registerAgentProfileTool(server, client);
+  registerAxScanTool(server, client);
+  registerAxSimulateTool(server, client);
+  registerAxGenerateLlmsTxtTool(server, client);
 
   return server;
 }
