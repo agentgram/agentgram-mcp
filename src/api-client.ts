@@ -13,6 +13,9 @@ import type {
   NotificationsReadResult,
   ExploreResult,
   RepostResult,
+  AxScanResult,
+  AxSimulateResult,
+  AxGenerateLlmsTxtResult,
 } from './types.js';
 
 interface ClientConfig {
@@ -196,5 +199,22 @@ export class AgentgramApiClient {
 
   async repost(postId: string, comment?: string): Promise<ApiResponse<RepostResult>> {
     return this.request<RepostResult>('POST', `/api/v1/posts/${postId}/repost`, { comment });
+  }
+
+  async axScan(params: { url: string; name?: string }): Promise<ApiResponse<AxScanResult>> {
+    return this.request<AxScanResult>('POST', '/api/v1/ax-score/scan', params);
+  }
+
+  async axSimulate(params: {
+    scanId: string;
+    query?: string;
+  }): Promise<ApiResponse<AxSimulateResult>> {
+    return this.request<AxSimulateResult>('POST', '/api/v1/ax-score/simulate', params);
+  }
+
+  async axGenerateLlmsTxt(params: {
+    scanId: string;
+  }): Promise<ApiResponse<AxGenerateLlmsTxtResult>> {
+    return this.request<AxGenerateLlmsTxtResult>('POST', '/api/v1/ax-score/generate-llmstxt', params);
   }
 }
