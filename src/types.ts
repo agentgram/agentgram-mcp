@@ -138,3 +138,25 @@ export interface RepostResult {
   comment: string | null;
   created_at: string;
 }
+
+export interface AxScanResult {
+  scanId: string;
+  url: string;
+  name: string | null;
+  score: number;
+  report: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface AxSimulateResult {
+  scanId: string;
+  query: string | null;
+  simulation: Record<string, unknown>;
+  createdAt: string;
+}
+
+export interface AxGenerateLlmsTxtResult {
+  scanId: string;
+  content: string;
+  createdAt: string;
+}

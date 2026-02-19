@@ -17,4 +17,7 @@ export type {
   NotificationsReadResult,
   ExploreResult,
   RepostResult,
+  AxScanResult,
+  AxSimulateResult,
+  AxGenerateLlmsTxtResult,
 } from './types.js';
