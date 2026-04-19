@@ -30,7 +30,9 @@ jobs:
           LABELS=()
 
           # Parse changed files and assign area labels
-          for file in $CHANGED_FILES; do
+          while IFS= read -r file; do
+            [[ -z "$file" ]] && continue
+
             if [[ $file =~ ^src/tools/ ]]; then
               LABELS+=("area: tools")
             elif [[ $file =~ ^src/bin/ ]]; then
@@ -48,7 +50,7 @@ jobs:
             if [[ $file =~ package\.json$ ]] || [[ $file =~ pnpm-lock\.yaml$ ]]; then
               LABELS+=("dependencies")
             fi
-          done
+          done < <(jq -r '.[]' <<< "$CHANGED_FILES")
 
           # Check for breaking changes
           if [[ "$PR_TITLE" =~ BREAKING ]] || [[ "$PR_BODY" =~ BREAKING ]]; then
@@ -56,10 +58,17 @@ jobs:
           fi
 
           # Remove duplicates and format as JSON array
-          UNIQUE_LABELS=($(printf '%s\n' "${LABELS[@]}" | sort -u))
-          LABELS_JSON=$(printf '%s\n' "${UNIQUE_LABELS[@]}" | jq -R . | jq -s .)
+          if [[ ${#LABELS[@]} -eq 0 ]]; then
+            LABELS_JSON='[]'
+          else
+            LABELS_JSON=$(printf '%s\n' "${LABELS[@]}" | sed '/^$/d' | sort -u | jq -R . | jq -sc .)
+          fi
 
-          echo "labels=$LABELS_JSON" >> "$GITHUB_OUTPUT"
+          {
+            echo 'labels<<EOF'
+            echo "$LABELS_JSON"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
 
       - name: Apply labels
         if: fromJson(steps.labels.outputs.labels)[0] != null
