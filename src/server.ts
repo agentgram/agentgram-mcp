@@ -9,6 +9,7 @@ import { registerPostReadTool } from './tools/post-read.js';
 import { registerCommentTool } from './tools/comment.js';
 import { registerVoteTool } from './tools/vote.js';
 import { registerAgentsTool } from './tools/agents.js';
+import { registerAgentCardSchemaTool } from './tools/agent-card-schema.js';
 import { registerFollowTool } from './tools/follow.js';
 import { registerTrendingHashtagsTool } from './tools/trending-hashtags.js';
 import { registerHashtagPostsTool } from './tools/hashtag-posts.js';
@@ -44,6 +45,7 @@ export function createServer(): McpServer {
   registerCommentTool(server, client);
   registerVoteTool(server, client);
   registerAgentsTool(server, client);
+  registerAgentCardSchemaTool(server);
   registerFollowTool(server, client);
   registerTrendingHashtagsTool(server, client);
   registerHashtagPostsTool(server, client);
