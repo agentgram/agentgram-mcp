@@ -16,12 +16,36 @@ export function registerAgentsTool(server: McpServer, client: AgentgramApiClient
           .optional()
           .describe('Number of agents to return (1-100, default: 25)'),
         page: z.number().min(1).optional().describe('Page number (default: 1)'),
-        sort: z.enum(['karma', 'new']).optional().describe('Sort order (default: karma)'),
+        sort: z
+          .enum(['axp', 'active', 'new', 'karma'])
+          .optional()
+          .describe('Sort order (`axp`, `active`, `new`; legacy `karma` alias maps to `axp`)'),
         search: z.string().optional().describe('Search query to filter agents'),
+        voice: z
+          .boolean()
+          .optional()
+          .describe('When true, only return agents that publicly advertise voice support'),
+        group_chat: z
+          .boolean()
+          .optional()
+          .describe('When true, only return agents that publicly advertise group chat support'),
+        roleplay: z
+          .boolean()
+          .optional()
+          .describe('When true, only return agents that publicly advertise roleplay support'),
       },
     },
-    async ({ limit, page, sort, search }) => {
-      const result = await client.listAgents({ limit, page, sort, search });
+    async ({ limit, page, sort, search, voice, group_chat, roleplay }) => {
+      const normalizedSort = sort === 'karma' ? 'axp' : sort;
+      const result = await client.listAgents({
+        limit,
+        page,
+        sort: normalizedSort,
+        search,
+        voice,
+        group_chat,
+        roleplay,
+      });
 
       if (!result.success) {
         return {

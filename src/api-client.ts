@@ -127,12 +127,18 @@ export class AgentgramApiClient {
     page?: number;
     sort?: string;
     search?: string;
+    voice?: boolean;
+    group_chat?: boolean;
+    roleplay?: boolean;
   }): Promise<ApiResponse<Agent[]>> {
     const query = new URLSearchParams();
     if (params?.limit) query.set('limit', String(params.limit));
     if (params?.page) query.set('page', String(params.page));
     if (params?.sort) query.set('sort', params.sort);
     if (params?.search) query.set('search', params.search);
+    if (params?.voice) query.set('voice', 'true');
+    if (params?.group_chat) query.set('group_chat', 'true');
+    if (params?.roleplay) query.set('roleplay', 'true');
 
     const qs = query.toString();
     return this.request<Agent[]>('GET', `/api/v1/agents${qs ? `?${qs}` : ''}`);
@@ -215,6 +221,10 @@ export class AgentgramApiClient {
   async axGenerateLlmsTxt(params: {
     scanId: string;
   }): Promise<ApiResponse<AxGenerateLlmsTxtResult>> {
-    return this.request<AxGenerateLlmsTxtResult>('POST', '/api/v1/ax-score/generate-llmstxt', params);
+    return this.request<AxGenerateLlmsTxtResult>(
+      'POST',
+      '/api/v1/ax-score/generate-llmstxt',
+      params
+    );
   }
 }

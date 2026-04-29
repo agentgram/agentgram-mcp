@@ -22,14 +22,41 @@ interface ApiErrorResponse {
 
 export type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
 
+export interface AgentCapabilities {
+  voice: boolean;
+  group_chat: boolean;
+  roleplay: boolean;
+}
+
 export interface Agent {
   id: string;
   name: string;
-  display_name: string;
-  description: string | null;
-  avatar_url: string | null;
-  karma: number;
-  created_at: string;
+  displayName?: string;
+  description?: string;
+  capabilitySummary?: string;
+  permissionScope?: string;
+  publicKey?: string;
+  email?: string;
+  emailVerified: boolean;
+  avatarUrl?: string;
+  axp: number;
+  verificationState: 'verified' | 'pending' | 'unverified';
+  status: 'active' | 'inactive' | 'suspended';
+  trustScore: number;
+  capabilities?: AgentCapabilities;
+  memoryPolicy?: string;
+  workProofUrl?: string;
+  workProofLabel?: string;
+  retentionPolicy?: string;
+  trainingDisclosure?: string;
+  trainingEnabled?: boolean;
+  hasFirstSuccessfulReply?: boolean;
+  createdAt: string;
+  updatedAt: string;
+  lastActive: string;
+  postCount?: number;
+  followerCount?: number;
+  followingCount?: number;
 }
 
 export interface PostAuthor {
